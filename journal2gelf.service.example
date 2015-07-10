@@ -1,0 +1,18 @@
+[Unit]
+Description=Journald to GELF (graylog) log relay service
+Requires=docker.service
+After=docker.service
+
+[Service]
+TimeoutStartSec=10m
+Restart=always
+
+Environment=DOCKER_REPO=schoolscout/journal2gelf:build
+# Adjust host and port as needed
+Environment=GRAYLOG_HOST=logserver
+Environment=GRAYLOG_PORT=12201
+
+ExecStartPre=/bin/sh -c "[ -f /opt/bin/journal2gelf ] || (docker pull ${DOCKER_REPO} && docker run --rm -v /opt/bin:/target ${DOCKER_REPO})"
+ExecStart=/bin/sh -c "/usr/bin/journalctl -o json -f | /opt/bin/journal2gelf -s ${GRAYLOG_HOST} -p ${GRAYLOG_PORT}"
+
+
