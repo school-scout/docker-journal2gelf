@@ -1,13 +1,15 @@
-IMAGE=schoolscout/journal2gelf
+IMAGE=schoolscout/journal2gelf:build
 GRAYLOG_SERVER=logserver
 GRAYLOG_PORT=12201
 
-build:
+journal2gelf: image
+	  docker run --rm -v $$PWD:/target ${IMAGE}
+
+image:
 		docker build -t ${IMAGE} .
 
-test: build
-		journalctl -o json -f | docker run -i --rm ${IMAGE} -s ${GRAYLOG_SERVER} -p ${GRAYLOG_PORT}
+test: journal2gelf
+		journalctl -o json -f | ./journal2gelf -s ${GRAYLOG_SERVER} -p ${GRAYLOG_PORT}
 
-push: build test
+push: image test
 		docker push ${IMAGE}
-

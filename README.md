@@ -1,6 +1,11 @@
-## journal2gelf on Docker
+## journal2gelf build image for Docker
 
-This Docker image just runs [journal2gelf](https://github.com/systemd/journal2gelf) in a container. Use it like this:
+This Docker image builds a statically compiled executable for [journal2gelf](https://github.com/systemd/journal2gelf) in a container.
 
-    journalctl -o json -f | docker run -i --rm schoolscout/journal2gelf -s ${GRAYLOG_HOST} -p ${GRAYLOG_PORT}
+Build `journal2gelf` executable:
 
+    make
+
+Run it:
+
+    journalctl -o json -f | ./journal2gelf -s ${GRAYLOG_SERVER} -p ${GRAYLOG_PORT}
