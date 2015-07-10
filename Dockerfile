@@ -11,4 +11,5 @@ RUN git clone http://github.com/systemd/journal2gelf.git
 WORKDIR /home/user/journal2gelf
 RUN pyinstaller -F journal2gelf
 
-ENTRYPOINT ["cp", "dist/journal2gelf", "/target/"]
+USER root
+ENTRYPOINT ["cp", "/home/user/journal2gelf/dist/journal2gelf", "/target/"]
